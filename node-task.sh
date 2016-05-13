@@ -94,11 +94,11 @@ then
 
    fi
 
-   echo "server killed"
 else
    echo "The statistics are normal"
 fi
 
-sleep 5
+echo "Halting for 30 seconds before checking the number of requests/active connections."
+sleep 30
 
 done
