@@ -38,6 +38,14 @@ sudo unlink /etc/nginx/sites-enabled/default
 sudo service nginx reload
 
 
+
+# server_port_number keeps the track of the last port on which the server was launched
+server_port_number=8080
+
+
+
+
+
 #Tracking number of active connections at an interval of 5 seconds
 
 while true 
@@ -48,12 +56,6 @@ do
 # Extracting number of active connections
 track=$(curl http://localhost/nginx_status | awk 'NR==1{print $3}')
 echo "Number of Active Connection" $track 
-
-
-
-# server_port_number keeps the track of the last port on which the server was launched
-server_port_number=8080
-
 
 
 # Cheking the number of requests and if greater than 100 launching new server
@@ -83,12 +85,11 @@ then
    then
    echo "Killing server on port number" $process
    sudo kill $process
+   
+# Removing the server from nginx config
+   sudo sed -i "/$server_port_number/d" /etc/nginx/nginx.conf 
    ((server_port_number=server_port_number-1))
 
-# Removing the server from nginx config
-
-   sudo sed -i "/$server_port_number/d" /etc/nginx/nginx.conf 
-   
    sudo service nginx reload   
 
    fi
