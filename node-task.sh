@@ -99,16 +99,17 @@ then
 
 elif [ $track -lt 100 ]
 then
-   process=$(ps -afx | grep $server_port_number | awk 'NR==1{print $1}')
+   process=$(ps -afx | grep "main.js" | grep $server_port_number | awk 'NR==1{print $1}')
    if [ $server_port_number -gt 8080 ]
    then
+# Removing the server from nginx config
+   sudo sed -i "/$server_port_number/d" /etc/nginx/nginx.conf 
+   nginx_task
+
    echo "Killing server on port number" $process
    sudo kill $process
    
-# Removing the server from nginx config
-   sudo sed -i "/$server_port_number/d" /etc/nginx/nginx.conf 
    ((server_port_number=server_port_number-1))
-   nginx_task
 
    fi
 
