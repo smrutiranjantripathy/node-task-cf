@@ -15,10 +15,11 @@ sudo apt-get install git -y
 git clone http://git@github.com/chetandhembre/hello-world-node.git node_js_task 
 
 # Install Node js
-sudo apt-get install nodejs -y
-sudo apt-get install node -y
-sudo apt-get install npm -y
-sudo apt-get install nodejs-legacy -y
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+
+
 
 # Running Node js to initiate server
 nohup node /home/ubuntu/node_js_task/main.js > output.log &
