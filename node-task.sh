@@ -48,11 +48,10 @@ then
 # Editing nginx Config file after launching Node Js server
 # Adding Module ngx_http_stub_status_module to keep a track of live connections and requests to server
 sudo sed -i '26i upstream myproject { \n   server 127.0.0.1:8080;\n    }\n\n server { \n    listen 80;\n   server_name www.domain.com;\n    location / {\n   proxy_pass http://myproject;\n    }\n   location /nginx_status {\n   # Turn on nginx stats \n  stub_status on;\n   # I do not need logs for stats \n  access_log   off;\n  # Security: Only allow access from 192.168.1.100 IP #\n  allow all;\n  # Send rest of the world to /dev/null #\n #deny all;\n  }\n  }' /etc/nginx/nginx.conf
-fi
-
-
 # Unlink Default Configuration
 sudo unlink /etc/nginx/sites-enabled/default
+fi
+
 
 
 
@@ -67,17 +66,17 @@ server_port_number=8080
 
 
 
-#Tracking number of active connections at an interval of 5 seconds
+#Tracking number of Active Requests at an interval of 30 seconds
 
 while true 
 do 
 
+# Extracting number of Active Requests
+total_number_of_requests=$(curl -s http://localhost/nginx_status | awk 'NR==3{print $3}')
+total_number_of_handled_requests=$(curl -s http://localhost/nginx_status | awk 'NR==3{print $2}')
+track=$((total_number_of_requests-total_number_of_handled_requests))
 
-
-# Extracting number of active connections
-track=$(curl -s http://localhost/nginx_status | awk 'NR==1{print $3}')
-echo "Number of Active Connection" $track 
-
+echo "Number of Active Requests" $track 
 
 # Cheking the number of requests and if greater than 100 launching new server
 if [ $track -gt 100 ]
