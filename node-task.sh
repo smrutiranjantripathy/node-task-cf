@@ -18,7 +18,8 @@ git clone http://git@github.com/chetandhembre/hello-world-node.git node_js_task
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-
+# Install Curl
+sudo apt-get install curl -y
 
 
 # Running Node js to initiate server
@@ -74,7 +75,7 @@ do
 
 
 # Extracting number of active connections
-track=$(curl http://localhost/nginx_status | awk 'NR==1{print $3}')
+track=$(curl -s http://localhost/nginx_status | awk 'NR==1{print $3}')
 echo "Number of Active Connection" $track 
 
 
