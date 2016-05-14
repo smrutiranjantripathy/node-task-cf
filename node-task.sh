@@ -25,6 +25,17 @@ sudo apt-get install -y nodejs
 nohup node /home/ubuntu/node_js_task/main.js > output.log &
 
 
+# A function to check nginx status and if not running then restart it or else reload it
+nginx_task () {
+sudo service nginx status | grep "nginx is running"
+if [ $? -ne 0 ]
+then
+sudo service nginx restart
+else
+sudo service nginx reload
+fi
+}
+
 
 #Checking if any duplicate entry as below exists
 grep "upstream myproject" /etc/nginx/nginx.conf
@@ -43,9 +54,9 @@ fi
 sudo unlink /etc/nginx/sites-enabled/default
 
 
-#Reload nginx
-sudo service nginx reload
 
+#Reload nginx
+nginx_task
 
 
 # server_port_number keeps the track of the last port on which the server was launched
@@ -82,8 +93,7 @@ then
      echo $line "line number"
      sudo sed -i "$((line+1))"i" server 127.0.0.1:$server_port_number;\n" /etc/nginx/nginx.conf
      echo "Server added to nginx"
-     sudo service nginx reload
-
+     nginx_task
 
 #Checking if the number of requests is less than 100 then killing the server
 
@@ -98,8 +108,7 @@ then
 # Removing the server from nginx config
    sudo sed -i "/$server_port_number/d" /etc/nginx/nginx.conf 
    ((server_port_number=server_port_number-1))
-
-   sudo service nginx reload   
+   nginx_task
 
    fi
 
