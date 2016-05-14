@@ -31,7 +31,7 @@ grep "upstream myproject" /etc/nginx/nginx.conf
 
 # IF "upstream" entry exists skip the below block:
 
-if [ $? ]
+if [ $? -ne 0 ]
 then
 # Editing nginx Config file after launching Node Js server
 # Adding Module ngx_http_stub_status_module to keep a track of live connections and requests to server
