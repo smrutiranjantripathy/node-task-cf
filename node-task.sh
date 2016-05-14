@@ -26,9 +26,17 @@ nohup node /home/ubuntu/node_js_task/main.js > output.log &
 
 
 
+#Checking if any duplicate entry as below exists
+grep "upstream myproject" /etc/nginx/nginx.conf
+
+# IF "upstream" entry exists skip the below block:
+
+if [ $? ]
+then
 # Editing nginx Config file after launching Node Js server
 # Adding Module ngx_http_stub_status_module to keep a track of live connections and requests to server
 sudo sed -i '26i upstream myproject { \n   server 127.0.0.1:8080;\n    }\n\n server { \n    listen 80;\n   server_name www.domain.com;\n    location / {\n   proxy_pass http://myproject;\n    }\n   location /nginx_status {\n   # Turn on nginx stats \n  stub_status on;\n   # I do not need logs for stats \n  access_log   off;\n  # Security: Only allow access from 192.168.1.100 IP #\n  allow all;\n  # Send rest of the world to /dev/null #\n #deny all;\n  }\n  }' /etc/nginx/nginx.conf
+fi
 
 
 # Unlink Default Configuration
