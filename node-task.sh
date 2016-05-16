@@ -80,6 +80,8 @@ echo "Number of Active Requests" $track
 if [ $track -gt 100 ]
 then
    echo "Create Server"
+# Tracking the line to sed in nginx
+     line=$(awk "/$server_port_number/{ print NR; exit }" /etc/nginx/nginx.conf)
    ((server_port_number=server_port_number+1))
     echo " Launching New server on port" $server_port_number
     nohup node /home/ubuntu/node_js_task/main.js --port $server_port_number > output.log &
@@ -87,7 +89,6 @@ then
 
 
 # Adding the new server to nginx Config file
-     line=$(awk "/$server_port_number/{ print NR; exit }" /etc/nginx/nginx.conf)
      echo $line "line number"
      sudo sed -i "$((line+1))"i" server 127.0.0.1:$server_port_number;\n" /etc/nginx/nginx.conf
      echo "Server added to nginx"
@@ -116,6 +117,6 @@ else
 fi
 
 echo "Halting for 30 seconds before checking the number of requests/active connections."
-sleep 30
+sleep 15
 
 done
