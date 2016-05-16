@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # Update Cache
 sudo apt-get update
@@ -72,9 +72,7 @@ while true
 do 
 
 # Extracting number of Active Requests
-total_number_of_requests=$(curl -s http://localhost/nginx_status | awk 'NR==3{print $3}')
-total_number_of_handled_requests=$(curl -s http://localhost/nginx_status | awk 'NR==3{print $2}')
-track=$((total_number_of_requests-total_number_of_handled_requests))
+track=$(cat /var/log/nginx/access.log | cut -d' ' -f4 | grep -c -e "`date -d '1 minute ago' +%d/%b/%Y:%H:%M:[00-59]`")
 
 echo "Number of Active Requests" $track 
 
