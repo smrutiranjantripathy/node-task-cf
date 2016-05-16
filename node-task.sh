@@ -116,7 +116,7 @@ else
    echo "The statistics are normal"
 fi
 
-echo "Halting for 30 seconds before checking the number of requests/active connections."
+echo "Halting for 15 seconds before checking the number of requests/active connections."
 sleep 15
 
 done
